@@ -12,11 +12,13 @@
     font-size: 27px;
 }
 
-.video-channel-name {
+.channel-name {
     box-sizing: border-box;
     font-family: Roboto, Arial, Helvetica, sans-serif;
     color: white;
     font-size: 27px;
+    padding-left: 50px;
+    position:relative; bottom: 40px;
 }
 
 body {
@@ -33,6 +35,8 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 1rem;
+    border-bottom: 2px solid rgba(204, 204, 204, 0.27);
+    padding-bottom: 0.5px;
 }
 
 .YouTubeLogo{
@@ -84,10 +88,11 @@ body {
     width: 1700px;
 }
 
-.video-channel-name{
+.channel-info{
     width: 90%;
     height: auto;
-    padding-top: 20px;
+    align-self: center;
+    padding-top: 10px;
     padding-left: 50px;
 }
 
@@ -153,11 +158,12 @@ body {
 
 .videos{
     display: grid;
-    grid-template-columns: 1200px 400px;
+    grid-template-columns: 1300px 400px;
     align-items: start;
 
     max-width: 2000px;
     margin-left: 50px;
     border-bottom: 2px solid #ccc;
     padding-bottom: 50px;
+    padding-top: 5px;
 }
