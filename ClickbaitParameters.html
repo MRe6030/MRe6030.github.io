@@ -1,0 +1,116 @@
+<!-- credit to Web Dev Simplified at https://www.youtube.com/watch?v=rhPSo4_Tgi0-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <title>Document</title>
+</head>
+<body>
+  <header class="header">
+    <a href="profilePage.html">
+    <img src="YouTubeLogo.jpg" alt="YouTubeLogo" class="YouTubeLogo" />
+  </a>
+  <form class="search-bar">
+    <input class="search-input" type="search" placeholder="Search" aria-label="Search"/>
+    <button type="submit" class="search-btn">
+      <img src="magnify.png" width="15" alt="">
+    </button>
+  </form>
+  <div class="menu-icons">
+    <a href="#">
+      <img src="addvideo.svg" width="50" alt="Upload video" />
+    </a>
+    <a href="#">
+      <img src="bell.svg" width="36" alt="notifications" />
+    </a>
+    <a href="#">
+      <img class="menu-channel-icon" src="PFP_small.jpg" alt="your channel" />
+    </a>
+  </div>
+  </header>
+<div class="videos">
+  <div class="mainVideo">
+    <section class="video-section">
+      <article class="video-container">
+        <a href="#" class="thumbnail">
+          <!-- <img class="thumbnail-image" src="placeholder.png"/> -->
+
+            <!--This is for the "clickbait parameters"-->
+            <div class='tableauPlaceholder' id='viz1668609950847' style='position: relative'><noscript><a href='#'><img alt='Clickbait Parameters ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Cl&#47;ClickbaitParameters&#47;ClickbaitParameters&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='ClickbaitParameters&#47;ClickbaitParameters' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Cl&#47;ClickbaitParameters&#47;ClickbaitParameters&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='en-US' /><param name='filter' value='publish=yes' /></object></div>                <script type='text/javascript'>                    var divElement = document.getElementById('viz1668609950847');                    var vizElement = divElement.getElementsByTagName('object')[0];                    if ( divElement.offsetWidth > 800 ) { vizElement.style.width='1000px';vizElement.style.height='827px';} else if ( divElement.offsetWidth > 500 ) { vizElement.style.width='1000px';vizElement.style.height='827px';} else { vizElement.style.width='100%';vizElement.style.height='727px';}                     var scriptElement = document.createElement('script');                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    vizElement.parentNode.insertBefore(scriptElement, vizElement);                </script>          
+          </a>
+        <div class="video-details">
+          <a href="#" style="text-decoration:none" class="video_title">
+            Prototype visualization 2 - clickbait parameters
+          </a>
+          <div class="description">
+            <script src="description.js"></script>
+            <div class="video_description" id="AttributesDescription">
+              <p>
+                By default, what we are looking at is the clickbait scale of all the videos that had a score > 1.<br>
+                Every time your video had an element of clickbait, 1 was added to scale. So if a video had 3 elements of clickbait, it has a score of 3.<br>
+                We defined elements of clickbait with 3 parameters:<br>
+                &emsp;&emsp;Does the video contain more than 15 tags (most sites recommend using around 8)?<br>
+                &emsp;&emsp;Is the title of the video in all caps?<br>
+                &emsp;&emsp;Does the title contain a clickbait phrase / keyword<br>
+                We defined a clickbait phrase / keyword as anything that is typically used in clickbait, such as:
+                &emsp;&emsp; "*EMOTIONAL*", more than exclamation points, "surprise", "believe". etc.<br>
+                It's not a perfect system, and there are false positives and negatives, but it's what we can produce for now.
+              </p>
+            </div>
+            <div class="expandMoreHolder">
+              <span expand-more data-hidetext="Hide Description" data-showtext="Show Description" 
+              data-target="AttributesDescription" class="btn-expand-more">Show Description</span>
+            </div>
+          </div>
+          <div class="video-metadata">
+            <span>12k views</span>
+            •
+            <span>1 week ago</span>
+            <span>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</span>
+            <img class="likes-image" src="likes.png" width="30" height="30"/>
+            <span>3.3k&emsp;&emsp;</span>
+            <img class="rotateimg180" src="likes.png" width="30" height="30" />
+            <span>1</span>
+          </div>
+        </div>
+      </article>
+    </section>
+  </div>
+  <!--<div class="recVideos">
+    <a href="#" class="recRow">
+      <img class="menu-channel-icon" src="placeholder.png" alt="your channel" />
+      <span height="100" class="recVideoText"> rec video 1 </span>
+    </a>
+    <a href="#" class="recRow">
+      <img class="menu-channel-icon" src="placeholder.png" alt="your channel" />
+        <span class="recVideoText"> rec video 2 with longer title</span>
+    </a>
+    <a href="#" class="recRow">
+      <img class="menu-channel-icon" src="placeholder.png" alt="your channel" />
+        <span class="recVideoText"> rec video 3 </span>
+    </a>
+    <a href="#" class="recRow">
+      <img class="menu-channel-icon" src="placeholder.png" alt="your channel" />
+        <span class="recVideoText"> rec video 4 </span>
+    </a>
+    <a href="#" class="recRow">
+      <img class="menu-channel-icon" src="placeholder.png" alt="your channel" />
+        <span class="recVideoText"> rec video 5 </span>
+    </a>
+    <a href="#" class="recRow">
+      <img class="menu-channel-icon" src="placeholder.png" alt="your channel" />
+        <span class="recVideoText"> rec video 6 </span>
+    </a>
+
+  </div>-->
+</div>
+<div class="channel-info">
+  <img class="channel-image" src="PFP.jpg" alt="">
+  <a href="profilePage.html" class="channel-name" style="text-decoration:none" class="video-channel-name">CPSC6040 - DataVis</a>
+</div>
+</body>
+</html>
