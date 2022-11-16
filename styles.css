@@ -24,7 +24,7 @@
 body {
     width: 100%;
     height: auto;
-    max-width: 1800px;
+    max-width: 2300px;
     margin: 0;
     padding-right: 50px;
     background-color: rgba(0, 0, 0, 0.838);
@@ -116,8 +116,30 @@ body {
 }
 
 .thumbnail{
-    width: inherit;
+    width: 2000px;
     height: auto;
+}
+
+.video_description{
+    height: 15px;
+    overflow: hidden;
+    transition: height 0.5s ease-in-out;
+    position: relative;
+}
+
+.video_description.expand-active{
+    height: auto;
+    transition: height 0.5s ease-in-out;
+}
+
+.expandMoreHolder{
+    padding: 10px 0;
+}
+
+.btn-expand-more{
+    cursor: pointer;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    display: inline-block;
 }
 
 .rotateimg180 {
@@ -129,7 +151,7 @@ body {
     height: auto;
 }
 
-.recVideos {
+/*.recVideos {
     display: grid;
     padding-right: 10px;
 }
@@ -154,14 +176,14 @@ body {
 .recRow {
     height: fit-content;
     padding-bottom: 20px;
-}
+}*/
 
 .videos{
-    display: grid;
+    /*display: grid;
     grid-template-columns: 1300px 400px;
-    align-items: start;
+    align-items: start;*/
 
-    max-width: 2000px;
+    max-width: 2300px;
     margin-left: 50px;
     border-bottom: 2px solid #ccc;
     padding-bottom: 50px;
