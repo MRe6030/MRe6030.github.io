@@ -24,7 +24,7 @@
 body {
     width: 100%;
     height: auto;
-    max-width: 1800px;
+    max-width: 2300px;
     margin: 0;
     padding-right: 50px;
     background-color: rgba(0, 0, 0, 0.838);
@@ -116,8 +116,33 @@ body {
 }
 
 .thumbnail{
-    width: inherit;
+    width: 2000px;
     height: auto;
+}
+
+.video_description{
+    height: 15px;
+    overflow: hidden;
+    transition: height 0.5s ease-in-out;
+    position: relative;
+    font-family: Roboto, Arial, Helvetica, sans-serif;
+    color: white;
+    font-size: 18px;
+}
+
+.video_description.expand-active{
+    height: auto;
+    transition: height 0.5s ease-in-out;
+}
+
+.expandMoreHolder{
+    padding: 10px 0;
+}
+
+.btn-expand-more{
+    cursor: pointer;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    display: inline-block;
 }
 
 .rotateimg180 {
@@ -129,7 +154,77 @@ body {
     height: auto;
 }
 
-.recVideos {
+.channel-banner{
+    align-self: center;
+    margin-top: 10px;
+    margin-left: 30px;
+}
+
+.profile-channel-info{
+    box-sizing: border-box;
+    font-family: Roboto, Arial, Helvetica, sans-serif;
+    color: white;
+    font-size: 27px;
+    padding-left: 30px;
+    position:relative;
+    bottom: 60px;
+}
+
+.profile-channel-info-name{
+    font-family: Roboto, Arial, Helvetica, sans-serif;
+    color: white;
+    font-size: 18px;
+}
+
+.profile-channel-info-subs{
+    font-family: Roboto, Arial, Helvetica, sans-serif;
+    color: white;
+    font-size: 13px;
+    width: 90%;
+    height: auto;
+    align-self: center;
+    padding-bottom: 20px;
+    padding-left: 135px;
+}
+
+.sub_header{
+    padding-left: 250px;
+    border-bottom: 2px solid rgba(204, 204, 204, 0.27);
+    padding-bottom: 0.5px;
+    max-width: 80%;
+    margin-left: 30px;
+
+    font-family: Roboto, Arial, Helvetica, sans-serif;
+    color: white;
+    font-size: 25px;
+}
+
+.video-list {
+    display: grid;
+    padding-right: 10px;
+}
+
+[class*="profile-video-"]{
+    font-family: Roboto, Arial, Helvetica, sans-serif;
+    color: white;
+    font-size: 25px;
+    margin-left: 250px;
+    position: relative;
+    max-width: 950px;
+    padding-bottom: 30px;
+}
+
+.profileVideoText {
+    font-family: Roboto, Arial, Helvetica, sans-serif;
+    color: white;
+    font-size: 20px;
+    float: right;
+    width: 400px;
+    margin-left: 5px;
+    margin-top: 120px;
+}
+
+/*.recVideos {
     display: grid;
     padding-right: 10px;
 }
@@ -154,14 +249,14 @@ body {
 .recRow {
     height: fit-content;
     padding-bottom: 20px;
-}
+}*/
 
 .videos{
-    display: grid;
+    /*display: grid;
     grid-template-columns: 1300px 400px;
-    align-items: start;
+    align-items: start;*/
 
-    max-width: 2000px;
+    max-width: 2300px;
     margin-left: 50px;
     border-bottom: 2px solid #ccc;
     padding-bottom: 50px;
