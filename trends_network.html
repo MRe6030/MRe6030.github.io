@@ -1,0 +1,145 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <title>Document</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    svg{
+        background-color: white;
+        color: black;
+    }
+    .percent, .count{
+        color: white;
+    }
+    
+  </style>
+</head>
+<body>
+  <header class="header">
+    <a href="index.html">
+    <img src="YouTubeLogo.jpg" alt="YouTubeLogo" class="YouTubeLogo" />
+  </a>
+  <form class="search-bar">
+    <input class="search-input" type="search" placeholder="Search" aria-label="Search"/>
+    <button type="submit" class="search-btn">
+      <img src="magnify.png" width="15" alt="">
+    </button>
+  </form>
+  <div class="menu-icons">
+    <a href="#">
+      <img src="addvideo.svg" width="50" alt="Upload video" />
+    </a>
+    <a href="#">
+      <img src="bell.svg" width="36" alt="notifications" />
+    </a>
+    <a href="#">
+      <img class="menu-channel-icon" src="PFP_small.jpg" alt="your channel" />
+    </a>
+  </div>
+  </header>
+<div class="videos">
+  <div class="mainVideo">
+    <section class="video-section">
+      <article class="video-container">
+        <a href="#" class="thumbnail">
+          <!-- <img class="thumbnail-image" src="placeholder.png"/> -->
+
+            <!--This is for the "clickbait parameters"-->
+            <form>
+                <input type="radio" style={color: white} name="test" class="percent" value="Percent" onclick="barChart('percent')">
+                <label for="percent" class="percent">Percent</label>
+                <br>
+                <input type="radio" name="test" class="count" value="Count" onclick="barChart('count')" checked="checked">
+                <label for="count" class="count">Count</label>
+                <br>
+            </form>
+            <svg class="bar-chart"></svg>
+            <svg class="legend">
+                <g>
+                    <rect x="10" y="0" width="20" height="20" fill="rgb(179,205,227)"></rect>
+                    <text x="35" y="15" font-family="Calibri" font-size="20" fill="black">ClickBait</text>
+        
+                    <rect x="110" y="0" width="20" height="20" fill="rgb(120,120,120)"></rect>
+                    <text x="135" y="15" font-family="Calibri" font-size="20" fill="black">Not ClickBait</text>
+        
+                </g>
+            </svg>
+            <script src="network.js" type="text/javascript"></script>          
+          </a>
+        <div class="video-details">
+          <a href="#" style="text-decoration:none" class="video_title">
+            Prototype visualization 5 - Category and Clickbait Comparison
+          </a>
+          <div class="description">
+            <script src="description.js"></script>
+            <div class="video_description" id="AttributesDescription">
+              <p>
+                This shows the relationship between Youtube trending video categories and clickbait. Clickbait is identified as containing:<br>
+                &emsp;&emsp;Does the video contain more than 15 tags (most sites recommend using around 8)?<br>
+                &emsp;&emsp;Is the title of the video in all caps?<br>
+                &emsp;&emsp;Does the title contain a clickbait phrase / keyword<br>
+                We defined a clickbait phrase / keyword as anything that is typically used in clickbait, such as:
+                &emsp;&emsp; "*EMOTIONAL*", more than exclamation points, "surprise", "believe". etc.<br>
+                It's not a perfect system, and there are false positives and negatives, but it's what we can produce for now.
+              </p>
+            </div>
+            <div class="expandMoreHolder">
+              <span expand-more data-hidetext="Hide Description" data-showtext="Show Description" 
+              data-target="AttributesDescription" class="btn-expand-more">Show Description</span>
+            </div>
+          </div>
+          <div class="video-metadata">
+            <span>12k views</span>
+            •
+            <span>1 week ago</span>
+            <span>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</span>
+            <img class="likes-image" src="likes.png" width="30" height="30"/>
+            <span>3.3k&emsp;&emsp;</span>
+            <img class="rotateimg180" src="likes.png" width="30" height="30" />
+            <span>1</span>
+          </div>
+        </div>
+      </article>
+    </section>
+  </div>
+  <!--<div class="recVideos">
+    <a href="#" class="recRow">
+      <img class="menu-channel-icon" src="placeholder.png" alt="your channel" />
+      <span height="100" class="recVideoText"> rec video 1 </span>
+    </a>
+    <a href="#" class="recRow">
+      <img class="menu-channel-icon" src="placeholder.png" alt="your channel" />
+        <span class="recVideoText"> rec video 2 with longer title</span>
+    </a>
+    <a href="#" class="recRow">
+      <img class="menu-channel-icon" src="placeholder.png" alt="your channel" />
+        <span class="recVideoText"> rec video 3 </span>
+    </a>
+    <a href="#" class="recRow">
+      <img class="menu-channel-icon" src="placeholder.png" alt="your channel" />
+        <span class="recVideoText"> rec video 4 </span>
+    </a>
+    <a href="#" class="recRow">
+      <img class="menu-channel-icon" src="placeholder.png" alt="your channel" />
+        <span class="recVideoText"> rec video 5 </span>
+    </a>
+    <a href="#" class="recRow">
+      <img class="menu-channel-icon" src="placeholder.png" alt="your channel" />
+        <span class="recVideoText"> rec video 6 </span>
+    </a>
+
+  </div>-->
+</div>
+<div class="channel-info">
+  <img class="channel-image" src="PFP.jpg" alt="">
+  <a href="index.html" class="channel-name" style="text-decoration:none" class="video-channel-name">CPSC6030 - DataVis</a>
+</div>
+</body>
+</html>
