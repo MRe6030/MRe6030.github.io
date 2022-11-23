@@ -3,11 +3,29 @@ var width=700
 var height=500
 var margin = {top: 20, right: 20, bottom: 150, left: 75};
 
+var totalDatum;
 var chart = d3.select(".bar-chart")
 .attr("width", width + margin.left + margin.right)
 .attr("height", height + margin.top + margin.bottom)
 .append("g")
-.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+.attr('pointer-events', "none");
+
+const tooltip = d3.select("body")
+.append("div")
+.attr("class","d3-tooltip")
+.style("position", "absolute")
+.style("z-index", "10")
+.style("visibility", "hidden")
+.style("padding", "15px")
+.style("background", "rgba(0,0,0,0.6)")
+.style("border-radius", "5px")
+.style("color", "#fff")
+.text("a simple tooltip");
+
+var treeType="Video"
+var category;
+
 
 
 var xChart = d3.scaleBand()
@@ -19,6 +37,15 @@ var yChart = d3.scaleLinear()
 
 var xAxis = d3.axisBottom(xChart);
 var yAxis = d3.axisLeft(yChart);
+
+var pieWidth=450
+    pieHeight=450
+    pieMargin=40
+var radius=200
+var pieSVG=d3.select('.pie').attr("width", pieWidth).attr("height", pieHeight)
+.append("g")
+.attr("transform", "translate(" + pieWidth / 2 + "," + pieHeight / 2 + ")");
+
 
 chart.append("g")
     .attr("class", "y axis")
@@ -54,6 +81,7 @@ chart
 var used_categories=[]
 var categoryList={}
 d3.csv("modified_USA_data.csv").then(function(dataset){
+    totalDatum=dataset
     for(var val in dataset){
         val=dataset[val]
 
@@ -70,58 +98,181 @@ d3.csv("modified_USA_data.csv").then(function(dataset){
         }
         categoryList[val["categoryId"]]["total"]+=1
     }
-    console.log(categoryList)
-    var data=[]
-    for(var val in categoryList){
-      data.push(categoryList[val])
-    }
-    data.sort((tagOne, tagTwo)=>{
-      return compareCounts(tagOne, tagTwo)
-    })
-    console.log(data)
-  
-    xChart.domain(data.map(function(d){ return d.name; }) );
-    yChart.domain( [0, d3.max(data, function(d){ return +d.total; })] );
-    
-    var barWidth = width / data.length;
-
-    var bars = chart.selectAll(".bar")
-                    .remove()
-                    .exit()
-                    .data(data)		
-    bars.enter()
-        .append("rect")
-        .attr("class", "bar")
-        .attr("x", function(d, i){ return i * barWidth + 1 })
-        .attr("y", function(d){ return yChart( d.bait); })
-        .attr("height", function(d){ return height - yChart(d.bait); })
-        .attr("width", barWidth - 1)
-        .attr("fill", "rgb(179,205,227)")
-    bars.enter()
-      .append("rect")
-          .attr("class", "bar")
-          .attr("x", function(d, i){ return i * barWidth + 1 })
-          .attr("y", function(d){ return yChart( d.bait+d.notbait); })
-          .attr("height", function(d){ return height - yChart(d.notbait); })
-          .attr("width", barWidth - 1)
-          .attr("fill", "rgb(120,120,120)")
-
-  
-      chart.select('.y')
-            .call(yAxis)
-      chart.select('.xAxis')
-          .attr("transform", "translate(0," + height + ")")
-          .call(xAxis)
-          .selectAll("text")
-              .style("text-anchor", "end")
-              .attr("dx", "-.8em")
-              .attr("dy", ".15em")
-              .attr("transform", function(d){
-                  return "rotate(-65)";
-              });
-    
+    barChart("count")
+    pieChart("")
+    treeMapChart("")
 })
 
+function updateTree(newType){
+    console.log("updating type")
+    treeType=newType;
+    treeMapChart(category)
+}
+var treemap=d3.treemap()
+.size([700, 500])
+.padding(1)
+
+var treeSVG=d3.select(".treemap")
+.attr("width", width + margin.left + margin.right)
+.attr("height", height + margin.top + margin.bottom)
+
+function pieChart(user){
+    var tempData=totalDatum;
+    if(treeType==="Channel" && user!==""){
+        tempData=totalDatum.filter(d=>d.channelTitle===user)
+
+    }
+    if(category!==undefined){
+        tempData=totalDatum.filter(d=>d.categoryId===category)
+    }
+    var pieData=[{"key": "Clickbait", "value": tempData.filter(d=>d["doesTitleContainClickbait OR isAllCaps"]==="1").length}, {"key": "Not Clickbait", "value": tempData.filter(d=>d["doesTitleContainClickbait OR isAllCaps"]==='0').length}]
+    var pie=d3.pie()
+    .value(d=>d.value)
+    const categories=["Clickbait", "Not Clickbait"]
+    const colors=["#FFB66D","#FFE76D"]
+
+    const colorScale=d3.scaleOrdinal()
+    .domain(categories)
+    .range(colors)
+    console.log(pieData)
+    var pieFinal=pie(pieData)
+    console.log("pieFinal")
+    console.log(pieFinal)
+    pieSVG.selectAll("*")
+    .remove()
+    .exit()
+    console.log("radius")
+    console.log(radius)
+    pieSVG.selectAll(".pieElement")
+    .data(pieFinal)
+    .enter()
+    .append('path')
+    //.merge(pieSVG)
+    // .transition()
+    // .duration(1000)
+    .attr("class", "pieElement")
+    .attr('d', d3.arc()
+      .innerRadius(0)
+      .outerRadius(radius)
+    )
+    .attr('fill', function(d){ return(colorScale(d.data.key)) })
+    .attr("stroke", "white")
+    .style("stroke-width", "2px")
+    .style("opacity", 1)
+
+
+    console.log(category)
+    if(user==="" && category===undefined){
+        pieSVG.append("text")
+        .attr("x", 0)             
+        .attr("y", -210)
+        .attr("text-anchor", "middle")  
+        .style("font-size", "16px") 
+        .style("color", "black")
+        .text("Proportion for All Videos");
+    }
+    else if(user==="" && category!==undefined){
+        pieSVG.append("text")
+        .attr("x", 0)             
+        .attr("y", -210)
+        .attr("text-anchor", "middle")  
+        .style("font-size", "16px") 
+        .style("color", "black")
+        .text(`Proportion for ${category}`);
+    }
+    else{
+        pieSVG.append("text")
+        .attr("x", 0)             
+        .attr("y", -210)
+        .attr("text-anchor", "middle")  
+        .style("font-size", "16px") 
+        .style("color", "black")
+        .text(`Proportion for Channel ${user}`);
+    }
+}
+function treeMapChart(category){
+    var treeDataFilter=totalDatum;
+    if(category!==""){
+        var treeDataFilter=totalDatum.filter(dataPoint=>dataPoint.categoryId===category)
+
+    }
+
+    var treeData={"title": "All videos for category", "children":[{"title": "Contains Clickbait", "children": []}, {"title": "Does not Contain Clickbait", "children": []}]}
+    if(treeType==="Video"){
+        treeData["children"][0]["children"]=(treeDataFilter.filter(dataPoint=>dataPoint["doesTitleContainClickbait OR isAllCaps"]==="0"))
+        treeData["children"][1]["children"]=(treeDataFilter.filter(dataPoint=>dataPoint["doesTitleContainClickbait OR isAllCaps"]==="1"))
+        
+    }
+    else{
+        var channelValues=[]
+        var usedChannels=[]
+        treeDataFilter.forEach(function(d){
+            d.likes=parseInt(d.likes)
+            var indexVal=usedChannels.indexOf(d.channelTitle)
+            if(indexVal!==-1){
+                console.log("already exists")
+                channelValues[indexVal].likes+=d.likes
+                if(d["doesTitleContainClickbait OR isAllCaps"]==="1"){
+                    channelValues[indexVal]["doesTitleContainClickbait OR isAllCaps"]="1"
+
+                }
+            }
+            else{
+                d.title=d.channelTitle
+                channelValues.push(d)
+                usedChannels.push(d.channelTitle)
+            }
+        })
+        treeData["children"][0]["children"]=(channelValues.filter(dataPoint=>dataPoint["doesTitleContainClickbait OR isAllCaps"]==="0"))
+        treeData["children"][1]["children"]=(channelValues.filter(dataPoint=>dataPoint["doesTitleContainClickbait OR isAllCaps"]==="1"))
+        
+    }
+    console.log(treeData);
+
+    const categories=treeData.children.map(d=>d["doesTitleContainClickbait OR isAllCaps"])
+    const colors=["#FFB66D","#FFE76D"]
+
+    const colorScale=d3.scaleOrdinal()
+    .domain(categories)
+    .range(colors)
+    const hierarchy=d3.hierarchy(treeData).sum(d=>parseInt(d.likes)).sort((a,b)=>b.height-a.height||parseInt(b["likes"])-parseInt(a["likes"]))
+    const root=treemap(hierarchy)
+    console.log(root)
+   
+    console.log(root.leaves())
+    treeSVG.selectAll("*")
+    .remove()
+    .exit()
+    treeSVG.selectAll("treeElement")
+       .data(root.leaves())
+       .enter()
+       .append("rect")
+       .attr("class", "treeElement")
+       .attr("x", d=>d.x0)   
+       .attr("y", d=>d.y0)
+       .attr("width",  d=>d.x1 - d.x0)
+       .attr("height", d=>d.y1 - d.y0)
+       .attr("fill", d=>colorScale(d.data["doesTitleContainClickbait OR isAllCaps"]))
+       .on("mouseover", function(d, i) {
+        tooltip.html(`Title: ${i.data.title}`).style("visibility", "visible");
+        d3.select(this)
+          .attr("opacity", "0.5");
+      })
+        .on("mousemove", function(){
+            tooltip
+            .style("top", (event.pageY-10)+"px")
+            .style("left",(event.pageX+10)+"px");
+        })
+        .on("mouseout", function() {
+            tooltip.html(``).style("visibility", "hidden");
+            d3.select(this).attr("opacity", "1.0");
+        })
+        .on("click", function(d, i){
+            pieChart(i.data.title)
+        })
+
+    
+}
 function barChart(typeChart){
 
     var data=[]
@@ -160,7 +311,20 @@ function barChart(typeChart){
         .attr("y", function(d){ return yChart( d.bait); })
         .attr("height", function(d){ return height - yChart(d.bait); })
         .attr("width", barWidth - 1)
-        .attr("fill", "rgb(179,205,227)")
+        .attr("fill", "#FFB66D")
+        .on('mouseover', function(event, d){
+
+            d3.select(this).transition()
+                    .duration('50')
+                    .attr('opacity', '.5');
+        })  
+        .on('mouseout', function(event, d){
+
+            d3.select(this).transition()
+                    .duration('50')
+                    .attr('opacity', '1.0');
+        })  
+        
     bars.enter()
     .append("rect")
         .attr("class", "bar")
@@ -168,9 +332,24 @@ function barChart(typeChart){
         .attr("y", function(d){ return yChart( d.bait+d.notbait); })
         .attr("height", function(d){ return height - yChart(d.notbait); })
         .attr("width", barWidth - 1)
-        .attr("fill", "rgb(120,120,120)")
-
-
+        .attr("fill", "#FFE76D")
+        .on('mouseover', function(event, d){
+           
+            d3.select(this).transition()
+                    .duration('50')
+                    .attr('opacity', '.5');
+        })  
+        .on('mouseout', function(event, d){
+            d3.select(this).transition()
+                    .duration('50')
+                    .attr('opacity', '1.0');
+        })  
+        .on('click', function(event, d){
+            console.log(d)
+            category=d.name;
+            treeMapChart(d.name)
+            pieChart("")
+        }) 
     chart.select('.y')
             .call(yAxis)
     chart.select('.xAxis')
