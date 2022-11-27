@@ -26,7 +26,12 @@ const tooltip = d3.select("body")
 var treeType="Video"
 var category;
 
-
+var stackplot = d3.select(".stackplot")
+.attr("width", width + margin.left + margin.right)
+.attr("height", height + margin.top + margin.bottom)
+.append("g")
+.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+.attr('pointer-events', "none");
 
 var xChart = d3.scaleBand()
 				.range([0, width]);
@@ -34,10 +39,12 @@ var xChart = d3.scaleBand()
 var yChart = d3.scaleLinear()
 				.range([height, 0]);
 
+var yTimeChart = d3.scaleLinear()
+    .range([height, 0]);
 
 var xAxis = d3.axisBottom(xChart);
 var yAxis = d3.axisLeft(yChart);
-
+var yTimeAxis=d3.axisLeft(yTimeChart);
 var pieWidth=450
     pieHeight=450
     pieMargin=40
@@ -45,6 +52,9 @@ var radius=200
 var pieSVG=d3.select('.pie').attr("width", pieWidth).attr("height", pieHeight)
 .append("g")
 .attr("transform", "translate(" + pieWidth / 2 + "," + pieHeight / 2 + ")");
+
+
+
 
 
 chart.append("g")
@@ -77,11 +87,16 @@ chart
 	.attr("transform", "translate(" + (width/2) + "," + (height + margin.bottom -10) + ")")
     .attr("font-family", "Calibri")
     .text("Category");
-
+var xTimeScale;
 var used_categories=[]
 var categoryList={}
 d3.csv("modified_USA_data.csv").then(function(dataset){
     totalDatum=dataset
+    let parseTime=d3.timeParse("%y.%d.%m")
+    totalDatum.forEach(d=>{
+        d.trending_date=parseTime(d.trending_date)
+    })
+
     for(var val in dataset){
         val=dataset[val]
 
@@ -98,10 +113,103 @@ d3.csv("modified_USA_data.csv").then(function(dataset){
         }
         categoryList[val["categoryId"]]["total"]+=1
     }
+
+    xTimeScale=d3.scaleTime()
+    .domain(d3.extent(totalDatum.map(d=>d.trending_date)))
+    .range([0, width])
+
+    var xTimeAxis=d3.axisBottom(xTimeScale)
+
+
+    stackplot.append("g")
+    .attr("class", "yaxis")
+    .attr("font-family", "Calibri")
+    .call(yTimeAxis)
+
+    stackplot.append("g")
+    .attr("class", "xAxis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(xTimeAxis.tickFormat(d3.timeFormat("%Y-%m-%d")))
+    .selectAll("text")
+        .style("text-anchor", "end")
+        .attr("dx", "-.8em")
+        .attr("dy", ".15em")
+        .attr("font-family", "Calibri")
+        .attr("transform", function(d){
+        return "rotate(-65)";
+        });
+
+    stackplot
+        .append("text")
+        .attr("class", "yAxisText")
+        .attr("transform", "translate(-55," +  (height+margin.bottom)/2 + ") rotate(-90)")
+        .attr("font-family", "Calibri")
+        .text("Number of Trending Videos");
+            
+    stackplot
+        .append("text")
+        .attr("transform", "translate(" + (width/2) + "," + (height + margin.bottom -10) + ")")
+        .attr("font-family", "Calibri")
+        .text("Date");
     barChart("count")
     pieChart("")
     treeMapChart("")
+    stack()
 })
+
+function stack(user){
+    var stackData=[]
+    var tempData=totalDatum
+    //var stackDat=d3.nest().key(d=>d.trending_date).entries(data)
+    if(category!==undefined){
+        tempData=tempData.filter(d=>d.categoryId===category)
+        //var mappedData=Array.from(new Set(tempData.map(d=>d.trending_date.toString())))
+
+    }
+    if(user!==undefined && user!==""){
+        tempData=tempData.filter(d=>d.channelTitle===user)
+    }
+    console.log("Length for stack")
+    console.log(tempData.length)
+    var sumStat=d3.group(tempData, d=>d.trending_date)  
+    const categories=["Clickbait", "Not Clickbait"]
+    const colors=["#FFB66D","#FFE76D"]
+    
+    const colorScale=d3.scaleOrdinal()
+    .domain(categories)
+    .range(colors)
+
+    yTimeChart.domain([0, d3.max(sumStat, function(d) { return d[1].length; })*1.2])
+    
+    
+    var stackedData=d3.stack().keys(categories).value(function(d,key){
+        if(key==="Clickbait"){
+            return d[1].filter(newD=>newD["doesTitleContainClickbait OR isAllCaps"]==="1").length
+        }
+        else{
+            return d[1].filter(newD=>newD["doesTitleContainClickbait OR isAllCaps"]==="0").length
+
+        }
+    })(sumStat)
+
+    stackplot.selectAll(".path")
+    .remove()
+    .exit()
+
+    stackplot.selectAll("plot")
+    .data(stackedData)
+    .enter()
+    .append("path")
+    .attr("class", "path")
+    .style("fill", d=>colorScale(d.key))
+    .attr("d", d3.area()
+        .x(function(d, i){return xTimeScale(d.data[0])})
+        .y0(function(d){return yTimeChart(d[0])})
+        .y1(function(d){return yTimeChart(d[1])})
+    )
+    stackplot.select('.yaxis')
+    .call(yTimeAxis)
+}
 
 function updateTree(newType){
     console.log("updating type")
@@ -117,14 +225,16 @@ var treeSVG=d3.select(".treemap")
 .attr("height", height + margin.top + margin.bottom)
 
 function pieChart(user){
+    console.log("called pieCart with user " + user)
     var tempData=totalDatum;
+    if(category!==undefined){
+        tempData=tempData.filter(d=>d.categoryId===category)
+    }
     if(treeType==="Channel" && user!==""){
-        tempData=totalDatum.filter(d=>d.channelTitle===user)
+        tempData=tempData.filter(d=>d.channelTitle===user)
 
     }
-    if(category!==undefined){
-        tempData=totalDatum.filter(d=>d.categoryId===category)
-    }
+
     var pieData=[{"key": "Clickbait", "value": tempData.filter(d=>d["doesTitleContainClickbait OR isAllCaps"]==="1").length}, {"key": "Not Clickbait", "value": tempData.filter(d=>d["doesTitleContainClickbait OR isAllCaps"]==='0').length}]
     var pie=d3.pie()
     .value(d=>d.value)
@@ -134,22 +244,20 @@ function pieChart(user){
     const colorScale=d3.scaleOrdinal()
     .domain(categories)
     .range(colors)
-    console.log(pieData)
     var pieFinal=pie(pieData)
-    console.log("pieFinal")
-    console.log(pieFinal)
+
     pieSVG.selectAll("*")
     .remove()
     .exit()
+
     console.log("radius")
     console.log(radius)
+
     pieSVG.selectAll(".pieElement")
     .data(pieFinal)
     .enter()
     .append('path')
-    //.merge(pieSVG)
-    // .transition()
-    // .duration(1000)
+
     .attr("class", "pieElement")
     .attr('d', d3.arc()
       .innerRadius(0)
@@ -269,6 +377,7 @@ function treeMapChart(category){
         })
         .on("click", function(d, i){
             pieChart(i.data.title)
+            stack(i.data.title)
         })
 
     
@@ -349,6 +458,7 @@ function barChart(typeChart){
             category=d.name;
             treeMapChart(d.name)
             pieChart("")
+            stack()
         }) 
     chart.select('.y')
             .call(yAxis)
