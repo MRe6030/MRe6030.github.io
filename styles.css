@@ -8,10 +8,28 @@
     display: grid;
     grid-template-columns: 900px 600px;
     align-items: start;
+    max-height: fit-content;
+}
+
+.treemap {
+    height: 530px;
+}
+
+.legend{
+    padding-left: 20px;
+    width: 250px;
+    height: 30px;
+    display: inline-block;
+
+}
+
+.treeHelper{
+    padding-left: 150px;
 }
 
 .Video-Channel-Form{
-    position: absolute;
+    padding-left: 0px;
+    margin: 0%;
     max-width: fit-content;
-    padding-top: 850px;
+    display: inline-block;
 }
