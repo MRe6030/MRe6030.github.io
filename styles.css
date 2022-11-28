@@ -1,0 +1,11 @@
+.svg-container{
+    display: grid;
+    grid-template-columns: 800px 600px;
+    align-items: start;
+}
+
+.Video-Channel-Form{
+    position: absolute;
+    max-width: fit-content;
+    padding-top: 500px;
+}

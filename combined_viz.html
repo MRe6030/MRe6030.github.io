@@ -1,74 +1,80 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!--<link rel="stylesheet" href="styles.css">-->
+  <link href="styles.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <title>Document</title>
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <style>
-    svg{
-        background-color: white;
-        color: black;
+    svg {
+      background-color: white;
+      color: black;
     }
-    .percent, .count{
-        color: black;
+
+    .percent,
+    .count {
+      color: black;
     }
-    g{
+
+    g {
       pointer-events: none;
     }
-    rect{
+
+    rect {
       pointer-events: all
     }
   </style>
 </head>
+
 <body>
 
 
   <!-- <img class="thumbnail-image" src="placeholder.png"/> -->
 
   <!--This is for the "clickbait parameters"-->
-  <form>
-      <input type="radio" name="test" class="percent" value="Percent" onclick="barChart('percent')">
-      <label for="percent" class="percent">Percent</label>
-      <br>
-      <input type="radio" name="test" class="count" value="Count" onclick="barChart('count')" checked="checked">
-      <label for="count" class="count">Count</label>
-      <br>
+  <form class="Count-Percent-Form">
+    <input type="radio" name="test" class="percent" value="Percent" onclick="barChart('percent')">
+    <label for="percent" class="percent">Percent</label>
+    <br>
+    <input type="radio" name="test" class="count" value="Count" onclick="barChart('count')" checked="checked">
+    <label for="count" class="count">Count</label>
+    <br>
   </form>
-  <svg class="bar-chart"></svg>
+  <div class="svg-container">
+    <svg class="bar-chart"></svg>
 
+    <svg class="pie"></svg>
 
-<svg class="pie"></svg>
+    <svg id="treemap" class="treemap"> </svg>
 
-  <svg class="treemap">  </svg>
-
-  <svg class="stackplot">  </svg>
-
+    <svg class="stackplot"> </svg>
+  </div>
+  <form id="Video-Channel-Form" class="Video-Channel-Form">
+    <input type="radio" name="tree" class="video" value="Video" onclick="updateTree('Video')" checked="checked">
+    <label for="percent" class="percent">By Video</label>
+    <br>
+    <input type="radio" name="tree" class="channel" value="Channel" onclick="updateTree('Channel')">
+    <label for="count" class="count">By Channel</label>
+    <br>
+  </form>
   <svg class="legend">
     <g>
-        <rect x="10" y="0" width="20" height="20" fill="#FFB66D"></rect>
-        <text x="35" y="15" font-family="Calibri" font-size="20" fill="black">ClickBait</text>
+      <rect x="10" y="0" width="20" height="20" fill="#c13a3a"></rect>
+      <text x="35" y="15" font-family="Calibri" font-size="20" fill="black">ClickBait</text>
 
-        <rect x="110" y="0" width="20" height="20" fill="#FFE76D"></rect>
-        <text x="135" y="15" font-family="Calibri" font-size="20" fill="black">Not ClickBait</text>
+      <rect x="110" y="0" width="20" height="20" fill="#66af46"></rect>
+      <text x="135" y="15" font-family="Calibri" font-size="20" fill="black">Not ClickBait</text>
 
     </g>
-</svg>
-<form>
-  <input type="radio" name="tree" class="video" value="Video" onclick="updateTree('Video')" checked="checked">
-  <label for="percent" class="percent">By Video</label>
-  <br>
-  <input type="radio" name="tree" class="channel" value="Channel" onclick="updateTree('Channel')">
-  <label for="count" class="count">By Channel</label>
-  <br>
-</form>
-  <script src="network.js" type="text/javascript"></script>          
+  </svg>
+  
+  <script src="network.js" type="text/javascript"></script>
 
 
 </body>
+
 </html>
