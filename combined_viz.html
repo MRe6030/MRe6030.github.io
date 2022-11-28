@@ -54,25 +54,27 @@
     <svg id="treemap" class="treemap"> </svg>
     <svg class="stackplot"> </svg>
   </div>
-
-  <form id="Video-Channel-Form" class="Video-Channel-Form">
-    <input type="radio" name="tree" class="video" value="Video" onclick="updateTree('Video')" checked="checked">
-    <label for="percent" class="percent">By Video</label>
-    <br>
-    <input type="radio" name="tree" class="channel" value="Channel" onclick="updateTree('Channel')">
-    <label for="count" class="count">By Channel</label>
-    <br>
-  </form>
-  <svg class="legend">
-    <g>
-      <rect x="10" y="0" width="20" height="20" fill="#c13a3a"></rect>
-      <text x="35" y="15" font-family="Calibri" font-size="20" fill="black">ClickBait</text>
-
-      <rect x="110" y="0" width="20" height="20" fill="#66af46"></rect>
-      <text x="135" y="15" font-family="Calibri" font-size="20" fill="black">Not ClickBait</text>
-
-    </g>
-  </svg>
+  <div class="treeHelper">
+    <form id="Video-Channel-Form" class="Video-Channel-Form">
+      <input type="radio" name="tree" class="video" value="Video" onclick="updateTree('Video')" checked="checked">
+      <label for="percent" class="percent">By Video</label>
+      <br>
+      <input type="radio" name="tree" class="channel" value="Channel" onclick="updateTree('Channel')">
+      <label for="count" class="count">By Channel</label>
+      <br>
+    </form>
+    <svg class="legend">
+      <g>
+        <rect x="10" y="0" width="20" height="20" fill="#c13a3a"></rect>
+        <text x="35" y="15" font-family="Calibri" font-size="20" fill="black">ClickBait</text>
+  
+        <rect x="110" y="0" width="20" height="20" fill="#66af46"></rect>
+        <text x="135" y="15" font-family="Calibri" font-size="20" fill="black">Not ClickBait</text>
+  
+      </g>
+    </svg>
+  </div>
+  
   
   <script src="network.js" type="text/javascript"></script>
 
