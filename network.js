@@ -219,6 +219,7 @@ function updateTree(newType) {
 var treemap = d3.treemap()
     .size([700, 500])
     .padding(1)
+    
 
 
 var treeWidth = 790;
@@ -382,6 +383,8 @@ function treeMapChart(category) {
             pieChart(i.data.title)
             stack(i.data.title)
         })
+
+    
 
 
 }
