@@ -39,7 +39,7 @@ const tooltip = d3.select("body")
     .style("color", "#fff")
     .text("a simple tooltip");
 
-var treeType = "Video"
+var treeType = "Channel"
 var category;
 
 var stackplot = d3.select(".stackplot")
@@ -413,16 +413,17 @@ function pieChart(user) {
     }
 }
 function treeMapChart(category) {
-    var treeDataFilter = totalDatum;
+    var treeDataFilter = [...totalDatum];
+    
     if (category !== "") {
-        var treeDataFilter = totalDatum.filter(dataPoint => dataPoint.categoryId === category)
+        treeDataFilter = treeDataFilter.filter(dataPoint => dataPoint.categoryId === category)
 
     }
 
     var treeData = { "title": "All videos for category", "children": [{ "title": "Contains Clickbait", "children": [] }, { "title": "Does not Contain Clickbait", "children": [] }] }
     if (treeType === "Video") {
-        treeData["children"][0]["children"] = (treeDataFilter.filter(dataPoint => dataPoint["doesTitleContainClickbait OR isAllCaps"] === "0"))
-        treeData["children"][1]["children"] = (treeDataFilter.filter(dataPoint => dataPoint["doesTitleContainClickbait OR isAllCaps"] === "1"))
+        treeData["children"][0]["children"] = [...(treeDataFilter.filter(dataPoint => dataPoint["doesTitleContainClickbait OR isAllCaps"] === "0"))]
+        treeData["children"][1]["children"] = [...(treeDataFilter.filter(dataPoint => dataPoint["doesTitleContainClickbait OR isAllCaps"] === "1"))]
 
     }
     else {
@@ -433,20 +434,22 @@ function treeMapChart(category) {
             var indexVal = usedChannels.indexOf(d.channelTitle)
             if (indexVal !== -1) {
                 console.log("already exists")
-                channelValues[indexVal].likes += d.likes
+                channelValues[indexVal].channelLikes += d.likes
                 if (d["doesTitleContainClickbait OR isAllCaps"] === "1") {
-                    channelValues[indexVal]["doesTitleContainClickbait OR isAllCaps"] = "1"
+                    channelValues[indexVal]["channelHasClickbait"] = "1"
 
                 }
             }
             else {
-                d.title = d.channelTitle
+                //d.title = d.channelTitle
+                d["channelLikes"]=d.likes
+                d["channelHasClickbait"]=d["doesTitleContainClickbait OR isAllCaps"]
                 channelValues.push(d)
                 usedChannels.push(d.channelTitle)
             }
         })
-        treeData["children"][0]["children"] = (channelValues.filter(dataPoint => dataPoint["doesTitleContainClickbait OR isAllCaps"] === "0"))
-        treeData["children"][1]["children"] = (channelValues.filter(dataPoint => dataPoint["doesTitleContainClickbait OR isAllCaps"] === "1"))
+        treeData["children"][0]["children"] = (channelValues.filter(dataPoint => dataPoint["channelHasClickbait"] === "0"))
+        treeData["children"][1]["children"] = (channelValues.filter(dataPoint => dataPoint["channelHasClickbait"] === "1"))
 
     }
     console.log(treeData);
@@ -457,7 +460,7 @@ function treeMapChart(category) {
     const colorScale = d3.scaleOrdinal()
         .domain(categories)
         .range(colors)
-    const hierarchy = d3.hierarchy(treeData).sum(d => parseInt(d.likes)).sort((a, b) => b.height - a.height || parseInt(b["likes"]) - parseInt(a["likes"]))
+    const hierarchy = d3.hierarchy(treeData).sum(d => parseInt(d.channelLikes)).sort((a, b) => b.height - a.height || parseInt(b["likes"]) - parseInt(a["likes"]))
     const root = treemap(hierarchy)
     console.log(root)
 
@@ -474,9 +477,9 @@ function treeMapChart(category) {
         .attr("y", d => d.y0)
         .attr("width", d => d.x1 - d.x0)
         .attr("height", d => d.y1 - d.y0)
-        .attr("fill", d => colorScale(d.data["doesTitleContainClickbait OR isAllCaps"]))
+        .attr("fill", d => colorScale(d.data["channelHasClickbait"]))
         .on("mouseover", function (d, i) {
-            tooltip.html(`Title: ${i.data.title}`).style("visibility", "visible");
+            tooltip.html(`Title: ${i.data.channelTitle}`).style("visibility", "visible");
             d3.select(this)
                 .attr("opacity", "0.5");
         })
@@ -490,9 +493,9 @@ function treeMapChart(category) {
             d3.select(this).attr("opacity", "1.0");
         })
         .on("click", function (d, i) {
-            pieChart(i.data.title)
-            stack(i.data.title)
-            bubble(i.data.title)
+            pieChart(i.data.channelTitle)
+            stack(i.data.channelTitle)
+            bubble(i.data.channelTitle)
         })
 
     
