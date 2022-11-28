@@ -11,6 +11,22 @@ var chart = d3.select(".bar-chart")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
     .attr('pointer-events', "none");
 
+var bubbleChart= d3.select(".bubble")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+    .attr('pointer-events', "none");
+
+var xBubbleChart = d3.scaleLinear()
+    .range([0, width]);
+
+var yBubbleChart = d3.scaleLinear()
+    .range([height, 0]);
+
+var xBubbleAxis = d3.axisBottom(xBubbleChart);
+var yBubbleAxis = d3.axisLeft(yBubbleChart);    
+
 const tooltip = d3.select("body")
     .append("div")
     .attr("class", "d3-tooltip")
@@ -74,6 +90,9 @@ chart.append("g")
     .attr("transform", function (d) {
         return "rotate(-65)";
     });
+
+
+
 
 chart
     .append("text")
@@ -155,7 +174,98 @@ d3.csv("modified_USA_data.csv").then(function (dataset) {
     pieChart("")
     treeMapChart("")
     stack()
+    bubble()
 })
+
+
+function bubble(user){
+    var tempData=totalDatum;
+    if (user !== undefined && user !== "") {
+        tempData = tempData.filter(d => d.channelTitle === user)
+    }
+    if(category!==undefined){
+        tempData=tempData.filter(d=>d.categoryId===category)
+    }
+    var used_ids=[]
+    function removeDuplicates(id){
+        console.log(id.title+id.channelTitle)
+        if(used_ids.includes(id.title+id.channelTitle)){
+            return false;
+        }
+        used_ids.push(id.title+id.channelTitle)
+        return true;
+    }
+    tempData=tempData.filter(removeDuplicates)
+    console.log(tempData)
+
+    const categories = ["1", "0"]
+    const colors = ["#c13a3a", "#66af46"]
+
+    const colorScale = d3.scaleOrdinal()
+        .domain(categories)
+        .range(colors)
+
+    
+    bubbleChart.selectAll("*")
+        .remove()
+        .exit()
+    xBubbleChart.domain([0, d3.max(tempData, d=>+d.view_count)])
+    yBubbleChart.domain([0, d3.max(tempData, d=>+d.likes)])
+    bubbleChart.append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(xBubbleChart))
+    .selectAll("text")
+    .style("text-anchor", "end")
+    .attr("dx", "-.8em")
+    .attr("dy", ".15em")
+    .attr("transform", function (d) {
+        return "rotate(-65)";
+    });
+    console.log(d3.max(tempData, d=>d.view_count))
+
+    bubbleChart.append("g")
+    .call(d3.axisLeft(yBubbleChart));
+
+    var sizeScale=d3.scaleLinear().domain([0, d3.max(tempData, d=>+d.comment_count)]).range([1,10])
+
+    bubbleChart.append('g')
+        .selectAll('dot')
+        .data(tempData)
+        .enter()
+        .append("circle")
+            .attr("cx", d=>xBubbleChart(d.view_count))
+            .attr("cy", d=>yBubbleChart(d.likes))
+            .attr("r", d=>sizeScale(d.comment_count))
+            .style("fill", d=>colorScale(d["doesTitleContainClickbait OR isAllCaps"]))
+            .on("mouseover", function (d, i) {
+                tooltip.html(`Title: ${i.title}`).style("visibility", "visible");
+                d3.select(this)
+                    .attr("opacity", "0.5");
+            })
+            .on("mousemove", function () {
+                tooltip
+                    .style("top", (event.pageY - 10) + "px")
+                    .style("left", (event.pageX + 10) + "px");
+            })
+            .on("mouseout", function () {
+                tooltip.html(``).style("visibility", "hidden");
+                d3.select(this).attr("opacity", "1.0");
+            })
+    bubbleChart
+        .append("text")
+        .attr("class", "yAxisText")
+        .attr("transform", "translate(-65," + (height + margin.bottom) / 2 + ") rotate(-90)")
+        .attr("font-family", "Calibri")
+        .text("Number of Likes");
+    
+    bubbleChart
+        .append("text")
+        .attr("transform", "translate(" + (width / 2) + "," + (height + margin.bottom - 40) + ")")
+        .attr("font-family", "Calibri")
+        .text("Number of Views");
+
+
+}
 
 function stack(user) {
     var stackData = []
@@ -382,6 +492,7 @@ function treeMapChart(category) {
         .on("click", function (d, i) {
             pieChart(i.data.title)
             stack(i.data.title)
+            bubble(i.data.title)
         })
 
     
@@ -472,6 +583,7 @@ function barChart(typeChart) {
             treeMapChart(d.name)
             pieChart("")
             stack()
+            bubble()
         })
     chart.select('.y')
         .call(yAxis)
