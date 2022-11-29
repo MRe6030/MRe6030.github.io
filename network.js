@@ -62,12 +62,12 @@ var xAxis = d3.axisBottom(xChart);
 var yAxis = d3.axisLeft(yChart);
 var yTimeAxis = d3.axisLeft(yTimeChart);
 var pieWidth = 300
-pieHeight = 300
-pieMargin = 40
-var radius = 100
+pieHeight = 150 
+pieMargin = 20
+var radius = 50
 var pieSVG = d3.select('.pie').attr("width", pieWidth).attr("height", pieHeight)
-    .append("g")
-    .attr("transform", "translate(" + pieWidth / 2 + "," + pieHeight / 2 + ")");
+   .append("g")
+   .attr("transform", "translate(" + pieWidth / 2 + "," + pieHeight / 2 + ")");
 
 
 
@@ -109,6 +109,16 @@ chart
 var xTimeScale;
 var used_categories = []
 var categoryList = {}
+
+function reset(){
+    category=undefined;
+    console.log("calling reset")
+    barChart("count")
+    pieChart("")
+    treeMapChart("")
+    stack()
+    bubble()
+}
 d3.csv("modified_USA_data.csv").then(function (dataset) {
     totalDatum = dataset
     let parseTime = d3.timeParse("%y.%d.%m")
@@ -188,7 +198,6 @@ function bubble(user){
     }
     var used_ids=[]
     function removeDuplicates(id){
-        console.log(id.title+id.channelTitle)
         if(used_ids.includes(id.title+id.channelTitle)){
             return false;
         }
@@ -196,7 +205,6 @@ function bubble(user){
         return true;
     }
     tempData=tempData.filter(removeDuplicates)
-    console.log(tempData)
 
     const categories = ["1", "0"]
     const colors = ["#c13a3a", "#66af46"]
@@ -221,7 +229,6 @@ function bubble(user){
     .attr("transform", function (d) {
         return "rotate(-65)";
     });
-    console.log(d3.max(tempData, d=>d.view_count))
 
     bubbleChart.append("g")
     .call(d3.axisLeft(yBubbleChart));
@@ -387,29 +394,29 @@ function pieChart(user) {
     if (user === "" && category === undefined) {
         pieSVG.append("text")
             .attr("x", 0)
-            .attr("y", -110)
+            .attr("y", -55)
             .attr("text-anchor", "middle")
             .style("font-size", "16px")
             .style("color", "black")
-            .text("Proportion for All Videos");
+            .text("All Videos");
     }
     else if (user === "" && category !== undefined) {
         pieSVG.append("text")
             .attr("x", 0)
-            .attr("y", -110)
+            .attr("y", -55)
             .attr("text-anchor", "middle")
             .style("font-size", "16px")
             .style("color", "black")
-            .text(`Proportion for ${category}`);
+            .text(`${category}`);
     }
     else {
         pieSVG.append("text")
-            .attr("x", 0)
-            .attr("y", -110)
+            .attr("x", -55)
+            .attr("y", 25)
             .attr("text-anchor", "middle")
             .style("font-size", "16px")
             .style("color", "black")
-            .text(`Proportion for Channel ${user}`);
+            .text(`Channel ${user}`);
     }
 }
 function treeMapChart(category) {

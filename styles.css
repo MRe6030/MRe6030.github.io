@@ -1,6 +1,6 @@
 .bar-pie-container{
     display: grid;
-    grid-template-columns: 650px 400px;
+    grid-template-columns: 300px 300px 300px;
     align-items: start;
 }
 

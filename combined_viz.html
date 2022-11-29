@@ -39,6 +39,8 @@
   <!-- <img class="thumbnail-image" src="placeholder.png"/> -->
 
   <!--This is for the "clickbait parameters"-->
+  <button onClick="reset()">Reset</button>
+
   <form class="Count-Percent-Form">
     <input type="radio" name="test" class="percent" value="Percent" onclick="barChart('percent')">
     <label for="percent" class="percent">Percent</label>
@@ -53,6 +55,9 @@
     <svg class="pie"></svg>
     <svg class="bubble"></svg>
 
+    <div class="videoPlots">
+      <svg class="likesPie"></svg>
+    </div>
   </div>
   <div class="tree-stack-container">
     <svg id="treemap" class="treemap"> </svg>
