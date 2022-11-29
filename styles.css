@@ -1,6 +1,6 @@
-.bar-pie-container{
+.bar-pie-bubble-container{
     display: grid;
-    grid-template-columns: 650px 400px;
+    grid-template-columns: 650px 400px 600px;
     align-items: start;
 }
 
