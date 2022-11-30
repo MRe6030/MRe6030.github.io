@@ -50,10 +50,10 @@ var stackplot = d3.select(".stackplot")
     .attr('pointer-events', "none");
 
 var xChart = d3.scaleBand()
-    .range([0, width]);
+    .range([0, width*.75]);
 
 var yChart = d3.scaleLinear()
-    .range([height, 0]);
+    .range([height*.75, 0]);
 
 var yTimeChart = d3.scaleLinear()
     .range([height, 0]);
@@ -103,7 +103,7 @@ chart
 
 chart
     .append("text")
-    .attr("transform", "translate(" + (width / 2) + "," + (height + margin.bottom - 10) + ")")
+    .attr("transform", "translate(" + (width*.75 / 2) + "," + (height*.75 + margin.bottom - 10) + ")")
     .attr("font-family", "Calibri")
     .text("Category");
 var xTimeScale;
@@ -112,7 +112,7 @@ var categoryList = {}
 
 function reset(){
     category=undefined;
-    console.log("calling reset")
+    //console.log("calling reset")
     barChart("count")
     pieChart("")
     treeMapChart("")
@@ -190,12 +190,12 @@ d3.csv("modified_USA_data.csv").then(function (dataset) {
 
 function bubble(user){
     var tempData=totalDatum;
-    if (user !== undefined && user !== "") {
+    /*if (user !== undefined && user !== "") {
         tempData = tempData.filter(d => d.channelTitle === user)
     }
     if(category!==undefined){
         tempData=tempData.filter(d=>d.categoryId===category)
-    }
+    }*/
     var used_ids=[]
     function removeDuplicates(id){
         if(used_ids.includes(id.title+id.channelTitle)){
@@ -258,6 +258,15 @@ function bubble(user){
                 tooltip.html(``).style("visibility", "hidden");
                 d3.select(this).attr("opacity", "1.0");
             })
+        .filter(function (d) {
+            return d.categoryId != category
+        })
+        .each(function() {
+            var local = d3.local();
+            local.set(this, d3.select(this).style("fill"));
+        })
+        .style("opacity", 0.15);
+
     bubbleChart
         .append("text")
         .attr("class", "yAxisText")
@@ -286,8 +295,8 @@ function stack(user) {
     if (user !== undefined && user !== "") {
         tempData = tempData.filter(d => d.channelTitle === user)
     }
-    console.log("Length for stack")
-    console.log(tempData.length)
+    //console.log("Length for stack")
+    //console.log(tempData.length)
     var sumStat = d3.group(tempData, d => d.trending_date)
     const categories = ["Clickbait", "Not Clickbait"]
     const colors = ["#c13a3a", "#66af46"]
@@ -329,7 +338,7 @@ function stack(user) {
 }
 
 function updateTree(newType) {
-    console.log("updating type")
+    //console.log("updating type")
     treeType = newType;
     treeMapChart(category)
 }
@@ -346,7 +355,7 @@ var treeSVG = d3.select(".treemap")
     .attr("height", treeHeight + margin.top + margin.bottom)
 
 function pieChart(user) {
-    console.log("called pieCart with user " + user)
+    //console.log("called pieCart with user " + user)
     var tempData = totalDatum;
     if (category !== undefined) {
         tempData = tempData.filter(d => d.categoryId === category)
@@ -371,8 +380,8 @@ function pieChart(user) {
         .remove()
         .exit()
 
-    console.log("radius")
-    console.log(radius)
+    //console.log("radius")
+    //console.log(radius)
 
     pieSVG.selectAll(".pieElement")
         .data(pieFinal)
@@ -390,7 +399,7 @@ function pieChart(user) {
         .style("opacity", 1)
 
 
-    console.log(category)
+    //console.log(category)
     if (user === "" && category === undefined) {
         pieSVG.append("text")
             .attr("x", 0)
@@ -440,7 +449,7 @@ function treeMapChart(category) {
             d.likes = parseInt(d.likes)
             var indexVal = usedChannels.indexOf(d.channelTitle)
             if (indexVal !== -1) {
-                console.log("already exists")
+                //console.log("already exists")
                 channelValues[indexVal].channelLikes += d.likes
                 if (d["doesTitleContainClickbait OR isAllCaps"] === "1") {
                     channelValues[indexVal]["channelHasClickbait"] = "1"
@@ -459,7 +468,7 @@ function treeMapChart(category) {
         treeData["children"][1]["children"] = (channelValues.filter(dataPoint => dataPoint["channelHasClickbait"] === "1"))
 
     }
-    console.log(treeData);
+    //console.log(treeData);
 
     const categories = treeData.children.map(d => d["doesTitleContainClickbait OR isAllCaps"])
     const colors = ["#c13a3a", "#66af46"]
@@ -469,9 +478,9 @@ function treeMapChart(category) {
         .range(colors)
     const hierarchy = d3.hierarchy(treeData).sum(d => parseInt(d.channelLikes)).sort((a, b) => b.height - a.height || parseInt(b["likes"]) - parseInt(a["likes"]))
     const root = treemap(hierarchy)
-    console.log(root)
+    //console.log(root)
 
-    console.log(root.leaves())
+    //console.log(root.leaves())
     treeSVG.selectAll("*")
         .remove()
         .exit()
@@ -529,12 +538,12 @@ function barChart(typeChart) {
     data.sort((tagOne, tagTwo) => {
         return compareCounts(tagOne, tagTwo)
     })
-    console.log(data)
+    //console.log(data)
 
     xChart.domain(data.map(function (d) { return d.name; }));
     yChart.domain([0, d3.max(data, function (d) { return +d.total; })]);
 
-    var barWidth = width / data.length;
+    var barWidth = width*.75 / data.length;
 
     var bars = chart.selectAll(".bar")
         .remove()
@@ -545,7 +554,7 @@ function barChart(typeChart) {
         .attr("class", "bar")
         .attr("x", function (d, i) { return i * barWidth + 1 })
         .attr("y", function (d) { return yChart(d.bait); })
-        .attr("height", function (d) { return height - yChart(d.bait); })
+        .attr("height", function (d) { return height*.75 - yChart(d.bait); })
         .attr("width", barWidth - 1)
         .attr("fill", "#c13a3a")
         .on('mouseover', function (event, d) {
@@ -561,7 +570,7 @@ function barChart(typeChart) {
                 .attr('opacity', '1.0');
         })
         .on('click', function (event, d) {
-            console.log(d)
+            //console.log(d)
             category = d.name;
             treeMapChart(d.name)
             pieChart("")
@@ -573,7 +582,7 @@ function barChart(typeChart) {
         .attr("class", "bar")
         .attr("x", function (d, i) { return i * barWidth + 1 })
         .attr("y", function (d) { return yChart(d.bait + d.notbait); })
-        .attr("height", function (d) { return height - yChart(d.notbait); })
+        .attr("height", function (d) { return height*.75 - yChart(d.notbait); })
         .attr("width", barWidth - 1)
         .attr("fill", "#66af46")
         .on('mouseover', function (event, d) {
@@ -588,7 +597,7 @@ function barChart(typeChart) {
                 .attr('opacity', '1.0');
         })
         .on('click', function (event, d) {
-            console.log(d)
+            //console.log(d)
             category = d.name;
             treeMapChart(d.name)
             pieChart("")
@@ -598,7 +607,7 @@ function barChart(typeChart) {
     chart.select('.y')
         .call(yAxis)
     chart.select('.xAxis')
-        .attr("transform", "translate(0," + height + ")")
+        .attr("transform", "translate(0," + height*.75 + ")")
         .call(xAxis)
         .selectAll("text")
         .style("text-anchor", "end")
@@ -617,19 +626,19 @@ function barChart(typeChart) {
     }
 }
 var VideoChannelForm = document.getElementById('Video-Channel-Form');
-console.log(VideoChannelForm.getBoundingClientRect());
+//console.log(VideoChannelForm.getBoundingClientRect());
 
 var treemapVis = document.getElementById('treemap')
 var rect = treemapVis.getBoundingClientRect();
 VideoChannelForm.style.left = rect.left + "px";
 VideoChannelForm.style.top = rect.top + "px";
 
-console.log(rect);
-console.log(VideoChannelForm.getBoundingClientRect());
+//console.log(rect);
+//console.log(VideoChannelForm.getBoundingClientRect());
 
 
-console.log(used_categories)
-console.log(categoryList)
+//console.log(used_categories)
+//console.log(categoryList)
 function compareCounts(val1, val2) {
     if (val1.total < val2.total) {
         return 1;
