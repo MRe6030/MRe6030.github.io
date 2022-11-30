@@ -11,18 +11,39 @@ var chart = d3.select(".bar-chart")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
     .attr('pointer-events', "none");
 
+
+
 var bubbleChart= d3.select(".bubble")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
+    .attr("width", width*1.5 + margin.left + margin.right)
+    .attr("height", height*1.5 + margin.top + margin.bottom)
     .append("g")
+    .attr("id", "bubbleVis")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-    .attr('pointer-events', "none");
+    .attr('pointer-events', "none")
+    .call(d3.zoom().on("zoom", function(event) {
+        bubbleChart.attr("transform", event.transform);
+    }));
+
+let zoom = d3.zoom()
+	.scaleExtent([1, 10])
+	.on('zoom', handleZoom);
+
+function handleZoom(e) {
+    bubbleChart
+        .attr("transform", e.transform);
+}
+
+var zoomResetBTN = document.getElementById("zoomResetBTN");
+
+zoomResetBTN.addEventListener("click", d => { 
+    bubbleChart.call(zoom.transform, d3.zoomIdentity.translate(margin.left,margin.top).scale(1));
+})
 
 var xBubbleChart = d3.scaleLinear()
-    .range([0, width]);
+    .range([0, width*1.5]);
 
 var yBubbleChart = d3.scaleLinear()
-    .range([height, 0]);
+    .range([height*1.5, 0]);
 
 var xBubbleAxis = d3.axisBottom(xBubbleChart);
 var yBubbleAxis = d3.axisLeft(yBubbleChart);    
@@ -69,10 +90,6 @@ var pieSVG = d3.select('.pie').attr("width", pieWidth).attr("height", pieHeight)
    .append("g")
    .attr("transform", "translate(" + pieWidth / 2 + "," + pieHeight / 2 + ")");
 
-
-
-
-
 chart.append("g")
     .attr("class", "y axis")
     .attr("font-family", "Calibri")
@@ -90,9 +107,6 @@ chart.append("g")
     .attr("transform", function (d) {
         return "rotate(-65)";
     });
-
-
-
 
 chart
     .append("text")
@@ -220,7 +234,7 @@ function bubble(user){
     xBubbleChart.domain([0, d3.max(tempData, d=>+d.view_count)])
     yBubbleChart.domain([0, d3.max(tempData, d=>+d.likes)])
     bubbleChart.append("g")
-    .attr("transform", "translate(0," + height + ")")
+    .attr("transform", "translate(0," + height*1.5 + ")")
     .call(d3.axisBottom(xBubbleChart))
     .selectAll("text")
     .style("text-anchor", "end")
@@ -276,7 +290,7 @@ function bubble(user){
     
     bubbleChart
         .append("text")
-        .attr("transform", "translate(" + (width / 2) + "," + (height + margin.bottom - 40) + ")")
+        .attr("transform", "translate(" + (width / 2) + "," + (height*1.5 + margin.bottom - 40) + ")")
         .attr("font-family", "Calibri")
         .text("Number of Views");
 

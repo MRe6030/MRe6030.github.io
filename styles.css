@@ -1,6 +1,12 @@
-.bar-pie-bubble-container{
+.bar-pie-container{
     display: grid;
-    grid-template-columns: 200px 300px 300px;
+    grid-template-columns: 200px 300px;
+    align-items: start;
+}
+
+.bar-bubble{
+    display: grid;
+    grid-template-columns: 500px 500px;
     align-items: start;
 }
 
@@ -9,6 +15,11 @@
     grid-template-columns: 900px 600px;
     align-items: start;
     max-height: fit-content;
+}
+
+.bubble{
+    border-style: solid;
+    margin-left: 300px;
 }
 
 .treemap {
