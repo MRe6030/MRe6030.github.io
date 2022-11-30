@@ -1,41 +1,59 @@
 .bar-pie-container{
     display: grid;
-    grid-template-columns: 200px 300px;
-    align-items: start;
-}
-
-.bar-bubble{
-    display: grid;
-    grid-template-columns: 500px 500px;
+    grid-template-columns: 200px 500px 300px;
+    width: 450px;
+    height: 375px;
     align-items: start;
 }
 
 .tree-stack-container{
+    position: relative;
     display: grid;
     grid-template-columns: 900px 600px;
     align-items: start;
     max-height: fit-content;
 }
 
-.bubble{
-    border-style: solid;
+.bar-bubble{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 20xp;
+}
+
+.bubbleContainer {
+    margin-top: -30px;
     margin-left: 300px;
+    position: relative;
+    border: solid;
+    max-width: 750px;
+}
+
+.bubbleContainer #zoomResetBTN {
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    background-color: #555;
+    color: white;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.stackplot {
+    margin-left: -200px;
+    margin-top: -30px;
 }
 
 .treemap {
+    margin-top: -150px;
     height: 530px;
 }
 
 .legend{
-    padding-left: 20px;
+    position: relative;
     width: 250px;
     height: 30px;
-    display: inline-block;
-
-}
-
-.treeHelper{
-    padding-left: 150px;
 }
 
 .Video-Channel-Form{

@@ -14,8 +14,8 @@ var chart = d3.select(".bar-chart")
 
 
 var bubbleChart= d3.select(".bubble")
-    .attr("width", width*1.5 + margin.left + margin.right)
-    .attr("height", height*1.5 + margin.top + margin.bottom)
+    .attr("width", width*1.3 + margin.left + margin.right)
+    .attr("height", height*1.2 + margin.top + margin.bottom)
     .append("g")
     .attr("id", "bubbleVis")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
@@ -40,10 +40,10 @@ zoomResetBTN.addEventListener("click", d => {
 })
 
 var xBubbleChart = d3.scaleLinear()
-    .range([0, width*1.5]);
+    .range([0, width*1.4]);
 
 var yBubbleChart = d3.scaleLinear()
-    .range([height*1.5, 0]);
+    .range([height*1.4, 0]);
 
 var xBubbleAxis = d3.axisBottom(xBubbleChart);
 var yBubbleAxis = d3.axisLeft(yBubbleChart);    
@@ -65,7 +65,7 @@ var category;
 
 var stackplot = d3.select(".stackplot")
     .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
+    .attr("height", height*0.8 + margin.top + margin.bottom)
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
     .attr('pointer-events', "none");
@@ -191,7 +191,7 @@ d3.csv("modified_USA_data.csv").then(function (dataset) {
 
     stackplot
         .append("text")
-        .attr("transform", "translate(" + (width / 2) + "," + (height + margin.bottom - 10) + ")")
+        .attr("transform", "translate(" + (width / 2) + "," + (height + margin.bottom - 60) + ")")
         .attr("font-family", "Calibri")
         .text("Date");
     barChart("count")
@@ -231,10 +231,10 @@ function bubble(user){
     bubbleChart.selectAll("*")
         .remove()
         .exit()
-    xBubbleChart.domain([0, d3.max(tempData, d=>+d.view_count)])
+    xBubbleChart.domain([0, d3.max(tempData, d=>+d.view_count)+5000000])
     yBubbleChart.domain([0, d3.max(tempData, d=>+d.likes)])
     bubbleChart.append("g")
-    .attr("transform", "translate(0," + height*1.5 + ")")
+    .attr("transform", "translate(0," + height*1.4 + ")")
     .call(d3.axisBottom(xBubbleChart))
     .selectAll("text")
     .style("text-anchor", "end")
@@ -290,7 +290,7 @@ function bubble(user){
     
     bubbleChart
         .append("text")
-        .attr("transform", "translate(" + (width / 2) + "," + (height*1.5 + margin.bottom - 40) + ")")
+        .attr("transform", "translate(" + (width / 2) + "," + (height*1.3 + margin.bottom - 40) + ")")
         .attr("font-family", "Calibri")
         .text("Number of Views");
 
@@ -367,6 +367,7 @@ var treeHeight = 500;
 var treeSVG = d3.select(".treemap")
     .attr("width", treeWidth + margin.left + margin.right)
     .attr("height", treeHeight + margin.top + margin.bottom)
+    
 
 function pieChart(user) {
     //console.log("called pieCart with user " + user)
@@ -495,6 +496,8 @@ function treeMapChart(category) {
     //console.log(root)
 
     //console.log(root.leaves())
+    
+    
     treeSVG.selectAll("*")
         .remove()
         .exit()

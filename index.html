@@ -34,13 +34,25 @@
   </style>
 </head>
 
-<body>
+<body scroll="no" style="overflow: hidden">
 
+  <header class="header">
+    <svg class="legend">
+      <g>
+        <rect x="10" y="0" width="20" height="20" fill="#c13a3a"></rect>
+        <text x="35" y="15" font-family="Calibri" font-size="20" fill="black">ClickBait</text>
+  
+        <rect x="110" y="0" width="20" height="20" fill="#66af46"></rect>
+        <text x="135" y="15" font-family="Calibri" font-size="20" fill="black">Not ClickBait</text>
+  
+      </g>
+    </svg>
+    <button onClick="reset()">Reset</button>
+  </header>
 
   <!-- <img class="thumbnail-image" src="placeholder.png"/> -->
 
   <!--This is for the "clickbait parameters"-->
-  <button onClick="reset()">Reset</button>
 
   <!--<form class="Count-Percent-Form">
     <input type="radio" name="test" class="percent" value="Percent" onclick="barChart('percent')">
@@ -52,43 +64,27 @@
   </form>-->
 
   <div class="bar-bubble">
+
     <div class="bar-pie-container">
       <svg class="bar-chart"></svg>
       <svg class="pie"></svg>
-  
+      <svg class="stackplot"> </svg>
+
       <div class="videoPlots">
         <svg class="likesPie"></svg>
       </div>
     </div>
-    <svg class="bubble"></svg>
-    <button id="zoomResetBTN">Reset Zoom</button>
-  </div>
   
+    <div class="bubbleContainer">
+      <svg class="bubble"></svg>
+      <button id="zoomResetBTN">Reset Zoom</button>
+    </div>
+    
+  </div>
+
   <div class="tree-stack-container">
     <svg id="treemap" class="treemap"> </svg>
-    <svg class="stackplot"> </svg>
   </div>
-  <div class="treeHelper">
-    <!-- <form id="Video-Channel-Form" class="Video-Channel-Form">
-      <input type="radio" name="tree" class="video" value="Video" onclick="updateTree('Video')" checked="checked">
-      <label for="percent" class="percent">By Video</label>
-      <br>
-      <input type="radio" name="tree" class="channel" value="Channel" onclick="updateTree('Channel')">
-      <label for="count" class="count">By Channel</label>
-      <br>
-    </form> -->
-    <svg class="legend">
-      <g>
-        <rect x="10" y="0" width="20" height="20" fill="#c13a3a"></rect>
-        <text x="35" y="15" font-family="Calibri" font-size="20" fill="black">ClickBait</text>
-
-        <rect x="110" y="0" width="20" height="20" fill="#66af46"></rect>
-        <text x="135" y="15" font-family="Calibri" font-size="20" fill="black">Not ClickBait</text>
-
-      </g>
-    </svg>
-  </div>
-
 
   <script src="network.js" type="text/javascript"></script>
 
