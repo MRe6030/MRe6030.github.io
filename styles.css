@@ -20,15 +20,20 @@
     grid-gap: 20xp;
 }
 
-.bubbleContainer {
+.bubbleContainer{
     margin-top: -30px;
     margin-left: 300px;
     position: relative;
     border: solid;
     max-width: 750px;
 }
-
-.bubbleContainer #zoomResetBTN {
+.treeContainer {
+    position: relative;
+    border: solid;
+    max-width: 885px;
+    height:530px;
+}
+.bubbleContainer #zoomResetBTN, .treeContainer, #treeZoomReset {
     position: absolute;
     top: 0%;
     left: 0%;
@@ -46,8 +51,8 @@
 }
 
 .treemap {
-    margin-top: -150px;
     height: 530px;
+    margin-left: 0px;
 }
 
 .legend{

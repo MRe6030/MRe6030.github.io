@@ -33,6 +33,7 @@ function handleZoom(e) {
         .attr("transform", e.transform);
 }
 
+
 var zoomResetBTN = document.getElementById("zoomResetBTN");
 
 zoomResetBTN.addEventListener("click", d => { 
@@ -368,7 +369,23 @@ var treeSVG = d3.select(".treemap")
     .attr("width", treeWidth + margin.left + margin.right)
     .attr("height", treeHeight + margin.top + margin.bottom)
     
+function handleTreeZoom(e) {
+    d3.select('.treemap g')
+          .attr('transform', e.transform);
+      }
+let treeZoom=d3.zoom().on('zoom', handleTreeZoom)
+d3.select('.treemap')
+    .call(treeZoom);
 
+
+var treeZoomReset = document.getElementById("treeZoomReset");
+
+treeZoomReset.addEventListener("click", d => { 
+    console.log("Button clicked")
+    d3.select(".treemap g").call(treeZoom.transform, d3.zoomIdentity);
+    d3.select(".treemap").call(treeZoom.transform, d3.zoomIdentity);
+
+})
 function pieChart(user) {
     //console.log("called pieCart with user " + user)
     var tempData = totalDatum;
@@ -447,7 +464,17 @@ function treeMapChart(category) {
     var treeDataFilter = [...totalDatum];
     
     if (category !== "") {
-        treeDataFilter = treeDataFilter.filter(dataPoint => dataPoint.categoryId === category)
+
+        treeDataFilter.forEach(function(d){
+            if(d.categoryId===category){
+                d["highlighted"]=1.0;
+            }
+            else{
+                d["highlighted"]=0.5;
+            }
+        })
+
+        //treeDataFilter = treeDataFilter.filter(dataPoint => dataPoint.categoryId === category)
 
     }
 
@@ -460,6 +487,8 @@ function treeMapChart(category) {
     else {
         var channelValues = []
         var usedChannels = []
+        var categoryList=Array.from([...new Set(treeDataFilter.map(d=>d.categoryId))])
+        console.log(categoryList)
         treeDataFilter.forEach(function (d) {
             d.likes = parseInt(d.likes)
             var indexVal = usedChannels.indexOf(d.channelTitle)
@@ -468,13 +497,16 @@ function treeMapChart(category) {
                 channelValues[indexVal].channelLikes += d.likes
                 if (d["doesTitleContainClickbait OR isAllCaps"] === "1") {
                     channelValues[indexVal]["channelHasClickbait"] = "1"
-
+                }
+                if(d.highlighted===1.0){
+                    channelValues[indexVal]["highlightedChannel"]=1.0
                 }
             }
             else {
                 //d.title = d.channelTitle
                 d["channelLikes"]=d.likes
                 d["channelHasClickbait"]=d["doesTitleContainClickbait OR isAllCaps"]
+                d["highlightedChannel"]=d["highlighted"]
                 channelValues.push(d)
                 usedChannels.push(d.channelTitle)
             }
@@ -483,7 +515,7 @@ function treeMapChart(category) {
         treeData["children"][1]["children"] = (channelValues.filter(dataPoint => dataPoint["channelHasClickbait"] === "1"))
 
     }
-    //console.log(treeData);
+    console.log(treeData);
 
     const categories = treeData.children.map(d => d["doesTitleContainClickbait OR isAllCaps"])
     const colors = ["#c13a3a", "#66af46"]
@@ -491,7 +523,7 @@ function treeMapChart(category) {
     const colorScale = d3.scaleOrdinal()
         .domain(categories)
         .range(colors)
-    const hierarchy = d3.hierarchy(treeData).sum(d => parseInt(d.channelLikes)).sort((a, b) => b.height - a.height || parseInt(b["likes"]) - parseInt(a["likes"]))
+    const hierarchy = d3.hierarchy(treeData).sum(d => parseInt(d.channelLikes)).sort(function(a,b){return categoryList.indexOf(b.data.categoryId) - categoryList.indexOf(a.data.categoryId)})
     const root = treemap(hierarchy)
     //console.log(root)
 
@@ -501,7 +533,9 @@ function treeMapChart(category) {
     treeSVG.selectAll("*")
         .remove()
         .exit()
-    treeSVG.selectAll("treeElement")
+    treeSVG.append("g")
+
+    treeSVG.select("g").selectAll("treeElement")
         .data(root.leaves())
         .enter()
         .append("rect")
@@ -511,10 +545,11 @@ function treeMapChart(category) {
         .attr("width", d => d.x1 - d.x0)
         .attr("height", d => d.y1 - d.y0)
         .attr("fill", d => colorScale(d.data["channelHasClickbait"]))
+        .attr("opacity", function(d){return d.data.highlightedChannel})
         .on("mouseover", function (d, i) {
             tooltip.html(`Title: ${i.data.channelTitle}`).style("visibility", "visible");
-            d3.select(this)
-                .attr("opacity", "0.5");
+            //d3.select(this)
+                //.attr("opacity", "0.5");
         })
         .on("mousemove", function () {
             tooltip
@@ -523,7 +558,7 @@ function treeMapChart(category) {
         })
         .on("mouseout", function () {
             tooltip.html(``).style("visibility", "hidden");
-            d3.select(this).attr("opacity", "1.0");
+            //d3.select(this).attr("opacity", "1.0");
         })
         .on("click", function (d, i) {
             pieChart(i.data.channelTitle)
@@ -647,8 +682,8 @@ var VideoChannelForm = document.getElementById('Video-Channel-Form');
 
 var treemapVis = document.getElementById('treemap')
 var rect = treemapVis.getBoundingClientRect();
-VideoChannelForm.style.left = rect.left + "px";
-VideoChannelForm.style.top = rect.top + "px";
+//VideoChannelForm.style.left = rect.left + "px";
+//VideoChannelForm.style.top = rect.top + "px";
 
 //console.log(rect);
 //console.log(VideoChannelForm.getBoundingClientRect());
