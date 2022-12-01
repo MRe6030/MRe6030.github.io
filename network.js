@@ -20,24 +20,23 @@ var bubbleChart= d3.select(".bubble")
     .attr("id", "bubbleVis")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
     .attr('pointer-events', "none")
-    .call(d3.zoom().on("zoom", function(event) {
-        bubbleChart.attr("transform", event.transform);
-    }));
-
-let zoom = d3.zoom()
-	.scaleExtent([1, 10])
-	.on('zoom', handleZoom);
 
 function handleZoom(e) {
-    bubbleChart
-        .attr("transform", e.transform);
-}
+        d3.select('#bubbleVis')
+              .attr('transform', e.transform);
+          }
+let zoom=d3.zoom().on('zoom', handleZoom)
+d3.select('.bubble')
+    .call(zoom);
 
 
 var zoomResetBTN = document.getElementById("zoomResetBTN");
 
 zoomResetBTN.addEventListener("click", d => { 
-    bubbleChart.call(zoom.transform, d3.zoomIdentity.translate(margin.left,margin.top).scale(1));
+    d3.select("#bubbleVis").call(zoom.transform, d3.zoomIdentity.translate(margin.left,margin.top));
+
+    d3.select(".bubble").call(zoom.transform, d3.zoomIdentity.translate(margin.left,margin.top));
+
 })
 
 var xBubbleChart = d3.scaleLinear()
