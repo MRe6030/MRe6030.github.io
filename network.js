@@ -273,7 +273,9 @@ function bubble(user){
                 d3.select(this).attr("opacity", "1.0");
             })
         .filter(function (d) {
-            return d.categoryId != category
+            if(category!==undefined){
+                return d.categoryId !== category
+            }
         })
         .each(function() {
             var local = d3.local();
