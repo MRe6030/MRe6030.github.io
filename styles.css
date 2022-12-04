@@ -32,10 +32,22 @@
     height:530px;
     margin-top: -130px;
 }
-.bubbleContainer #zoomResetBTN, .treeContainer, #treeZoomReset {
+.bubbleContainer #zoomResetBTN {
     position: absolute;
     top: 0%;
     left: 0%;
+    background-color: #555;
+    color: white;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#treeZoomReset {
+    position: absolute;
+    top: 0%;
+    left: 24.5%;
     background-color: #555;
     color: white;
     font-size: 16px;
@@ -52,7 +64,7 @@
 .treemap {
     height: 500px;
     max-width: 700px;
-    margin-left: 0px;
+    margin-left: 220px;
     border: solid;
 }
 

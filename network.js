@@ -266,20 +266,6 @@ function bubble(user){
                     return colorScale(d["doesTitleContainClickbait OR isAllCaps"])
                 }
             })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             .on("mouseover", function (d, i) {
                 tooltip.html(`Title: ${i.title}`).style("visibility", "visible");
                 d3.select(this)
