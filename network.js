@@ -1,4 +1,4 @@
-
+var selectedChannel = "";
 var width = 500
 var height = 300
 var margin = { top: 20, right: 20, bottom: 150, left: 75 };
@@ -117,7 +117,7 @@ chart
 
 chart
     .append("text")
-    .attr("transform", "translate(" + (width*.75 / 2) + "," + (height*.75 + margin.bottom - 10) + ")")
+    .attr("transform", "translate(" + (width*.75 / 2) + "," + (height*.70 + margin.bottom - 10) + ")")
     .attr("font-family", "Calibri")
     .text("Category");
 var xTimeScale;
@@ -191,7 +191,7 @@ d3.csv("modified_USA_data.csv").then(function (dataset) {
 
     stackplot
         .append("text")
-        .attr("transform", "translate(" + (width / 2) + "," + (height + margin.bottom - 60) + ")")
+        .attr("transform", "translate(" + (width / 2) + "," + (height*.95 + margin.bottom - 60) + ")")
         .attr("font-family", "Calibri")
         .text("Date");
     barChart("count")
@@ -220,8 +220,8 @@ function bubble(user){
     }
     tempData=tempData.filter(removeDuplicates)
 
-    const categories = ["1", "0"]
-    const colors = ["#c13a3a", "#66af46"]
+    const categories = ["2","1", "0"]
+    const colors = ["#0D324D", "#c13a3a", "#66af46"]
 
     const colorScale = d3.scaleOrdinal()
         .domain(categories)
@@ -257,7 +257,29 @@ function bubble(user){
             .attr("cx", d=>xBubbleChart(d.view_count))
             .attr("cy", d=>yBubbleChart(d.likes))
             .attr("r", d=>sizeScale(d.comment_count))
-            .style("fill", d=>colorScale(d["doesTitleContainClickbait OR isAllCaps"]))
+            .style("fill", d => {
+                if(selectedChannel == d.channelTitle)
+                {
+                    return colorScale("2")
+                }
+                else{
+                    return colorScale(d["doesTitleContainClickbait OR isAllCaps"])
+                }
+            })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             .on("mouseover", function (d, i) {
                 tooltip.html(`Title: ${i.title}`).style("visibility", "visible");
                 d3.select(this)
@@ -382,7 +404,8 @@ d3.select('.treemap')
 var treeZoomReset = document.getElementById("treeZoomReset");
 
 treeZoomReset.addEventListener("click", d => { 
-    console.log("Button clicked")
+    selectedChannel = "";
+    //console.log("Button clicked")
     d3.select(".treemap g").call(treeZoom.transform, d3.zoomIdentity);
     d3.select(".treemap").call(treeZoom.transform, d3.zoomIdentity);
 
@@ -489,7 +512,7 @@ function treeMapChart(category) {
         var channelValues = []
         var usedChannels = []
         var categoryList=Array.from([...new Set(treeDataFilter.map(d=>d.categoryId))])
-        console.log(categoryList)
+        //console.log(categoryList)
         treeDataFilter.forEach(function (d) {
             d.likes = parseInt(d.likes)
             var indexVal = usedChannels.indexOf(d.channelTitle)
@@ -516,7 +539,7 @@ function treeMapChart(category) {
         treeData["children"][1]["children"] = (channelValues.filter(dataPoint => dataPoint["channelHasClickbait"] === "1"))
 
     }
-    console.log(treeData);
+    //console.log(treeData);
 
     const categories = treeData.children.map(d => d["doesTitleContainClickbait OR isAllCaps"])
     const colors = ["#c13a3a", "#66af46"]
@@ -562,6 +585,7 @@ function treeMapChart(category) {
             //d3.select(this).attr("opacity", "1.0");
         })
         .on("click", function (d, i) {
+            selectedChannel = i.data.channelTitle;
             pieChart(i.data.channelTitle)
             stack(i.data.channelTitle)
             bubble(i.data.channelTitle)

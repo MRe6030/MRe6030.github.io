@@ -29,9 +29,8 @@
 }
 .treeContainer {
     position: relative;
-    border: solid;
-    max-width: 885px;
     height:530px;
+    margin-top: -130px;
 }
 .bubbleContainer #zoomResetBTN, .treeContainer, #treeZoomReset {
     position: absolute;
@@ -51,8 +50,10 @@
 }
 
 .treemap {
-    height: 530px;
+    height: 500px;
+    max-width: 700px;
     margin-left: 0px;
+    border: solid;
 }
 
 .legend{
