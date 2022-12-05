@@ -284,6 +284,7 @@ function bubble(user){
             if(category!==undefined){
                 return d.categoryId !== category
             }
+
         })
         .each(function() {
             var local = d3.local();
@@ -635,9 +636,11 @@ function barChart(typeChart) {
         .on('click', function (event, d) {
             //console.log(d)
             category = d.name;
+            selectedChannel=""
             treeMapChart(d.name)
             pieChart("")
             stack()
+            bubble()
         })
 
     bars.enter()
@@ -662,6 +665,7 @@ function barChart(typeChart) {
         .on('click', function (event, d) {
             //console.log(d)
             category = d.name;
+            selectedChannel=""
             treeMapChart(d.name)
             pieChart("")
             stack()
