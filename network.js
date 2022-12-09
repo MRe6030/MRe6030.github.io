@@ -267,7 +267,7 @@ function bubble(user){
                 }
             })
             .on("mouseover", function (d, i) {
-                tooltip.html(`Title: ${i.title}`).style("visibility", "visible");
+                tooltip.html(`Title: ${i.title} | Likes: ${i.likes}`).style("visibility", "visible");
                 d3.select(this)
                     .attr("opacity", "0.5");
             })
