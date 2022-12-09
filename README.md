@@ -5,12 +5,10 @@ By: Matthew Re, Noah Britt, && Wei Hao.
 
 --------------------------------------------------------------------
 
-The index.html main landing page is a youtube "profile page". Each of the "videos" is a visualization that answers the question asked in the video's title. Clicking on the thumbnail or the title of the video will take you to that question's page.
+This project aims to visualize some of YouTube's trending data from February an March 2021.
 
-Once you're on a questions page, You can experiment with each of the visualizations. Some of them are embedded Tableau visualizations, so Tableau provides a way to fullscreen the vis in the bottom right corner of the vis.
+In total, our dataset contained about 6000 rows of data (for just the USA). Each row contains information about a trending video. If we only want to look at unique videos, then we have about 1020 data points.
 
-Hitting the "show description" will do what the name of the button implies.
+The goal of this project was to attempt to find patterns in youtube's trending videos. We can look for these patterns by clicking on the bars in the bar chat, clicking on squares in the treemap, or zooming in on the treemap and bubblemap. 
 
-To return to the profile page, you can either click on the channel name "CPSC6030 - DataVis" located at the bottom of the page or click on youtube's thumbnail in the top left corner.
-
-Currently, the search bar does not do anything. Soon™.
+Both of the zoom-able visualizations have dedicated reset buttons in the top left corner of the visualization to reset the zoom and the pan. To reset the selected category back to show the data for all the categories, click on the white reset button above the bar chart.

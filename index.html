@@ -37,6 +37,7 @@
 <body scroll="no" style="overflow: hidden">
 
   <header class="header">
+    
     <svg class="legend">
       <g>
         <rect x="10" y="0" width="20" height="20" fill="#c13a3a"></rect>
@@ -49,19 +50,6 @@
     </svg>
     <button onClick="reset()">Reset</button>
   </header>
-
-  <!-- <img class="thumbnail-image" src="placeholder.png"/> -->
-
-  <!--This is for the "clickbait parameters"-->
-
-  <!--<form class="Count-Percent-Form">
-    <input type="radio" name="test" class="percent" value="Percent" onclick="barChart('percent')">
-    <label for="percent" class="percent">Percent</label>
-    <br>
-    <input type="radio" name="test" class="count" value="Count" onclick="barChart('count')" checked="checked">
-    <label for="count" class="count">Count</label>
-    <br>
-  </form>-->
 
   <div class="bar-bubble">
 
@@ -76,6 +64,7 @@
     </div>
   
     <div class="bubbleContainer">
+      <a class="bubbleText">Each bubble is a channel. When a Channel is selected in the Treemap it will turn dark blue here!</a>
       <svg class="bubble"></svg>
       <button id="zoomResetBTN">Reset Zoom</button>
     </div>
@@ -84,10 +73,13 @@
 
   <div class="tree-stack-container">
     <div class="treeContainer">
-      <svg id="treemap" class="treemap"> </svg>
+      <svg id="treemap" class="treemap">
+      </svg>
+      <a class="treeText">Size is equal to number of likes. Each square is a channel.</a>
       <button id="treeZoomReset">Reset Zoom</button>
     </div>
   </div>
+
 
   <script src="network.js" type="text/javascript"></script>
 
