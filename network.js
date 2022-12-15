@@ -267,7 +267,7 @@ function bubble(user){
                 }
             })
             .on("mouseover", function (d, i) {
-                tooltip.html(`Title: ${i.title}`).style("visibility", "visible");
+                tooltip.html(`Title: ${i.title} | Likes: ${i.likes}`).style("visibility", "visible");
                 d3.select(this)
                     .attr("opacity", "0.5");
             })
@@ -558,7 +558,7 @@ function treeMapChart(category) {
         .attr("fill", d => colorScale(d.data["channelHasClickbait"]))
         .attr("opacity", function(d){return d.data.highlightedChannel})
         .on("mouseover", function (d, i) {
-            tooltip.html(`Title: ${i.data.channelTitle}`).style("visibility", "visible");
+            tooltip.html(`Title: ${i.data.channelTitle} | Likes: ${i.data.channelLikes}`).style("visibility", "visible");
             //d3.select(this)
                 //.attr("opacity", "0.5");
         })
